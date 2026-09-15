@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  admin
+  tecnico
+  cliente
+}
+
+enum TicketStatus {
+  aberto
+  em_atendimento
+  encerrado
+}
+
+enum ServiceStatus {
+  ativo
+  inativo
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      UserRole  @default(cliente)
+  img       String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  availability        TechnicianAvailability?
+  ticketsAsClient     Ticket[]                @relation("ClientTickets")
+  ticketsAsTechnician Ticket[]                @relation("TechnicianTickets")
+
+  @@map("users")
+}
+
+model TechnicianAvailability {
+  id           String   @id @default(uuid())
+  technicianId String   @unique
+  workTime     String[]
+
+  technician User @relation(fields: [technicianId], references: [id], onDelete: Cascade)
+
+  @@map("technician_availability")
+}
+
+model Service {
+  id        Int           @id @default(autoincrement())
+  title     String
+  price     Decimal       @db.Decimal(10, 2)
+  status    ServiceStatus @default(ativo)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime?     @updatedAt @map("updated_at")
+
+  tickets Ticket[]
+
+  @@map("services")
+}
+
+model Ticket {
+  id           Int     @id @default(autoincrement())
+  clientId     String
+  technicianId String?
+  serviceId    Int
+
+  title       String
+  description String?
+
+  basePrice  Decimal  @db.Decimal(10, 2)
+  finalPrice Decimal? @db.Decimal(10, 2)
+
+  status TicketStatus @default(aberto)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  client     User    @relation("ClientTickets", fields: [clientId], references: [id], onDelete: Cascade)
+  technician User?   @relation("TechnicianTickets", fields: [technicianId], references: [id], onDelete: SetNull)
+  service    Service @relation(fields: [serviceId], references: [id])
+
+  ticketServices TicketService[]
+
+  @@map("tickets")
+}
+
+model TicketService {
+  id        Int      @id @default(autoincrement())
+  ticketId  Int
+  name      String
+  price     Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("ticket_services")
+}
