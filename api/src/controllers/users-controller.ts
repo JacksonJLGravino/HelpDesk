@@ -3,7 +3,6 @@ import { prisma } from "@/database/prisma";
 import { hash } from "bcrypt";
 import { z } from "zod";
 import { AppError } from "@/utils/AppError";
-import { DiskStorage } from "@/provider/disk-storage";
 
 class UsersController {
   async create(request: Request, response: Response) {
@@ -72,44 +71,22 @@ class UsersController {
       }
     }
 
-    const file = request.file;
-    const diskStorage = new DiskStorage();
+    const hashedPassword = password ? await hash(password, 8) : undefined;
 
-    try {
-      if (file) {
-        await diskStorage.saveFile(file.filename);
-      }
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: request.user.id,
+      },
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
 
-      const hashedPassword = password ? await hash(password, 8) : undefined;
+    const { password: _, ...userWithoutPassword } = updatedUser;
 
-      const updatedUser = await prisma.user.update({
-        where: {
-          id: request.user.id,
-        },
-        data: {
-          name,
-          email,
-          password: hashedPassword,
-          ...(file && {
-            img: file.filename,
-          }),
-        },
-      });
-
-      if (file && user.img) {
-        await diskStorage.deleteFile(user.img, "upload");
-      }
-
-      const { password: _, ...userWithoutPassword } = updatedUser;
-
-      return response.json(userWithoutPassword);
-    } catch (error) {
-      if (file) {
-        await diskStorage.deleteFile(file.filename, "upload");
-      }
-
-      throw error;
-    }
+    return response.json(userWithoutPassword);
   }
 
   async delete(request: Request, response: Response) {

@@ -5,9 +5,11 @@ import { servicesRoutes } from "./services-routes";
 import { technicianRoutes } from "./technician-routes";
 import { clientRoutes } from "./client-routes";
 import { ticketsRoutes } from "./tickets-routes";
+import { avatarRoutes } from "./avatar-routes";
 
 const routes = Router();
 routes.use("/users", usersRoutes);
+routes.use("/avatar", avatarRoutes);
 routes.use("/sessions", sessionsRoutes);
 routes.use("/services", servicesRoutes);
 routes.use("/technicians", technicianRoutes);
