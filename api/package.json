@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --env-file .env src/server.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "build": "tsup src --out-dir build",
+    "start": "node --env-file=.env build/server.mjs"
   },
   "keywords": [],
   "author": "Jackson Gravino",
@@ -31,6 +33,7 @@
     "@types/supertest": "^7.2.1",
     "prisma": "^7.9.1",
     "supertest": "^7.2.2",
+    "tsup": "^8.5.1",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
