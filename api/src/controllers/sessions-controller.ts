@@ -17,6 +17,9 @@ class SessionsController {
 
     const user = await prisma.user.findUnique({
       where: { email },
+      include: {
+        availability: true,
+      },
     });
 
     if (!user) {

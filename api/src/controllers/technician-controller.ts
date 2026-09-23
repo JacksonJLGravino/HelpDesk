@@ -155,6 +155,37 @@ class TechnicianController {
 
     return response.json(technicianWithUpdatedAvailability);
   }
+
+  async show(request: Request, response: Response) {
+    const paramsSchema = z.object({
+      id: z.uuid(),
+    });
+
+    const { id } = paramsSchema.parse(request.params);
+
+    const technician = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        img: true,
+        availability: {
+          select: {
+            workTime: true,
+          },
+        },
+      },
+    });
+
+    if (!technician || technician.availability === null) {
+      throw new AppError("Technician not found", 404);
+    }
+
+    return response.json(technician);
+  }
 }
 
 export { TechnicianController };

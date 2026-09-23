@@ -64,10 +64,35 @@ class TicketsController {
       orderBy: {
         createdAt: "desc",
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        basePrice: true,
+        finalPrice: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+
         service: {
           select: {
             title: true,
+          },
+        },
+
+        client: {
+          select: {
+            id: true,
+            name: true,
+            img: true,
+          },
+        },
+
+        technician: {
+          select: {
+            id: true,
+            name: true,
+            img: true,
           },
         },
       },
@@ -94,6 +119,12 @@ class TicketsController {
       include: {
         service: true,
         ticketServices: true,
+        client: {
+          select: { name: true, email: true, img: true },
+        },
+        technician: {
+          select: { id: true, name: true, email: true, img: true },
+        },
       },
     });
 

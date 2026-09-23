@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "@/database/prisma";
-import { hash } from "bcrypt";
+import { hash, compare } from "bcrypt";
 import { z } from "zod";
 import { AppError } from "@/utils/AppError";
 
@@ -37,22 +37,28 @@ class UsersController {
   }
 
   async update(request: Request, response: Response) {
-    const bodySchema = z.object({
-      name: z.string().trim().min(2).optional(),
-      email: z.email().optional(),
-      password: z.string().min(6).optional(),
-    });
+    const bodySchema = z
+      .object({
+        name: z.string().trim().min(2).optional(),
+        email: z.email().optional(),
+        oldPassword: z.string().optional(),
+        password: z.string().min(6).optional(),
+      })
+      .refine((data) => !data.password || !!data.oldPassword, {
+        message: "Informe a senha atual para definir uma nova senha",
+        path: ["oldPassword"],
+      });
 
-    const { name, email, password } = bodySchema.parse(request.body);
+    const { name, email, oldPassword, password } = bodySchema.parse(
+      request.body,
+    );
 
     if (!request.user) {
       throw new AppError("Unauthorized", 401);
     }
 
     const user = await prisma.user.findUnique({
-      where: {
-        id: request.user.id,
-      },
+      where: { id: request.user.id },
     });
 
     if (!user) {
@@ -61,31 +67,28 @@ class UsersController {
 
     if (email) {
       const userWithSameEmail = await prisma.user.findUnique({
-        where: {
-          email,
-        },
+        where: { email },
       });
-
       if (userWithSameEmail && userWithSameEmail.id !== request.user.id) {
         throw new AppError("User with same email already exists");
+      }
+    }
+
+    if (password) {
+      const passwordMatches = await compare(oldPassword!, user.password);
+      if (!passwordMatches) {
+        throw new AppError("Current password does not match");
       }
     }
 
     const hashedPassword = password ? await hash(password, 8) : undefined;
 
     const updatedUser = await prisma.user.update({
-      where: {
-        id: request.user.id,
-      },
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-      },
+      where: { id: request.user.id },
+      data: { name, email, password: hashedPassword },
     });
 
     const { password: _, ...userWithoutPassword } = updatedUser;
-
     return response.json(userWithoutPassword);
   }
 

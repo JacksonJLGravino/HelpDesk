@@ -10,5 +10,6 @@ technicianRoutes.use(ensureAuthenticated, verifyUserAuthorization(["admin"]));
 technicianRoutes.post("/", technicianController.create);
 technicianRoutes.get("/", technicianController.index);
 technicianRoutes.patch("/:id", technicianController.update);
+technicianRoutes.get("/:id", technicianController.show);
 
 export { technicianRoutes };
