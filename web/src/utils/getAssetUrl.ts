@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:3333";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export function getAssetUrl(fileName?: string) {
   if (!fileName) return undefined;
