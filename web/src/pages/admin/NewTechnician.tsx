@@ -68,7 +68,7 @@ export function NewTechnician() {
 
       await createTechnician(data);
 
-      navigate("/admin/tecnicos");
+      navigate("/technicians");
       return null;
     } catch (error) {
       if (error instanceof ZodError) {

@@ -277,16 +277,16 @@ export function ProfileModal({ role, user, onClose }: Props) {
         />
 
         {role === "tecnico" && user.availability && (
-          <div className="border-t border-gray-200 pt-5">
-            <h3 className="text-sm font-bold text-gray-800">Disponibilidade</h3>
-            <p className="text-xs text-gray-400">
+          <div className="">
+            <h3 className="text-sm font-bold text-gray-200">Disponibilidade</h3>
+            <p className="text-xs text-gray-300">
               Horários de atendimento definidos pelo admin
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {user.availability.map((time) => (
                 <span
                   key={time}
-                  className="rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600"
+                  className="rounded-full border border-gray-500 px-3 py-1 text-xs font-bold text-gray-400"
                 >
                   {time}
                 </span>

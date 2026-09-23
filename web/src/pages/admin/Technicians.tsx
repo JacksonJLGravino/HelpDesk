@@ -72,7 +72,7 @@ export function Technicians() {
                     avatarUrl={getAssetUrl(technician.img ?? undefined)}
                     size="md"
                   />
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-200">
                     {technician.name}
                   </span>
                 </div>

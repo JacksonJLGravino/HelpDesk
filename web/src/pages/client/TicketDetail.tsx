@@ -73,7 +73,7 @@ export function TicketDetail() {
 
       <div className="flex flex-col gap-4 md:flex-row">
         <div>
-          <div className="flex-1 rounded-[10px] border border-gray-500 p-4 md:p-8">
+          <div className="flex-1 rounded-[10px] border border-gray-500 p-4 md:p-6">
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-400">
                 {formatTicketCode(ticket.id)}
@@ -81,30 +81,30 @@ export function TicketDetail() {
               <Status type={mapTicketStatus(ticket.status)} />
             </div>
 
-            <h2 className="mt-2 text-xl font-bold text-gray-800">
+            <h2 className="mt-2 text-xl font-bold text-gray-200">
               {ticket.title}
             </h2>
 
             <div className="mt-6">
               <p className="text-sm text-gray-400">Descrição</p>
-              <p className="text-gray-700">{ticket.description}</p>
+              <p className="text-gray-300">{ticket.description}</p>
             </div>
 
             <div className="mt-6">
               <p className="text-sm text-gray-400">Categoria</p>
-              <p className="text-gray-700">{ticket.service?.title}</p>
+              <p className="text-gray-300">{ticket.service?.title}</p>
             </div>
 
             <div className="mt-6 flex gap-8">
               <div>
                 <p className="text-sm text-gray-400">Criado em</p>
-                <p className="text-gray-700">
+                <p className="text-gray-300">
                   {formatDateTime(ticket.createdAt)}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-gray-400">Atualizado em</p>
-                <p className="text-gray-700">
+                <p className="text-gray-300">
                   {formatDateTime(ticket.updatedAt)}
                 </p>
               </div>
@@ -113,7 +113,7 @@ export function TicketDetail() {
         </div>
 
         <div>
-          <div className="w-full rounded-[10px] border border-gray-500 p-4 md:w-96 md:p-8">
+          <div className="w-full rounded-[10px] border border-gray-500 p-4 md:w-96 md:p-6">
             <p className="text-xs font-bold text-gray-400">
               Técnico responsável
             </p>
@@ -126,7 +126,7 @@ export function TicketDetail() {
                   size="md"
                 />
                 <div>
-                  <p className="font-semibold text-gray-800">
+                  <p className="font-semibold text-gray-200">
                     {ticket.technician.name}
                   </p>
                   <p className="text-sm text-gray-400">

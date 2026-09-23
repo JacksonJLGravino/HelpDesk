@@ -128,61 +128,63 @@ export function TicketDetail() {
         )}
       </div>
 
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="flex gap-4 flex-col md:gap-6 md:flex-row">
         <div className="flex flex-1 flex-col gap-4">
-          <div className="rounded-[10px] border border-gray-500 p-4 md:p-8">
+          <div className="flex-1 rounded-[10px] border border-gray-500 p-4 md:p-6">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-400">
+              <p className="text-xs text-gray-300">
                 {formatTicketCode(ticket.id)}
               </p>
               <Status type={mapTicketStatus(ticket.status)} />
             </div>
 
-            <h2 className="mt-2 text-xl font-bold text-gray-800">
-              {ticket.title}
-            </h2>
+            <h2 className="font-bold text-gray-200">{ticket.title}</h2>
 
-            <div className="mt-6">
-              <p className="text-sm text-gray-400">Descrição</p>
-              <p className="text-gray-700">{ticket.description}</p>
+            <div className="mt-5">
+              <p className="text-xs font-bold text-gray-400">Descrição</p>
+              <p className="text-sm text-gray-200">{ticket.description}</p>
             </div>
 
-            <div className="mt-6">
-              <p className="text-sm text-gray-400">Categoria</p>
-              <p className="text-gray-700">{ticket.service?.title}</p>
+            <div className="mt-5">
+              <p className="text-xs font-bold text-gray-400">Categoria</p>
+              <p className="text-sm text-gray-200">{ticket.service?.title}</p>
             </div>
 
-            <div className="mt-6 flex gap-8">
+            <div className="mt-5 flex gap-8">
               <div>
-                <p className="text-sm text-gray-400">Criado em</p>
-                <p className="text-gray-700">
+                <p className="text-xs font-bold text-gray-400">Criado em</p>
+                <p className="text-sm text-gray-200">
                   {formatDateTime(ticket.createdAt)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-400">Atualizado em</p>
-                <p className="text-gray-700">
+                <p className="text-xs font-bold text-gray-400">Atualizado em</p>
+                <p className="text-sm text-gray-200">
                   {formatDateTime(ticket.updatedAt)}
                 </p>
               </div>
             </div>
 
-            <div className="mt-6">
-              <p className="text-sm text-gray-400">Cliente</p>
+            <div className="mt-5">
+              <p className="text-xs font-bold text-gray-400">Cliente</p>
               <div className="mt-2 flex items-center gap-2">
                 <AvatarImg
                   name={ticket.client?.name ?? "?"}
                   avatarUrl={getAssetUrl(ticket.client?.img ?? undefined)}
                   size="sm"
                 />
-                <span className="text-gray-800">{ticket.client?.name}</span>
+                <span className="text-sm text-gray-200">
+                  {ticket.client?.name}
+                </span>
               </div>
             </div>
           </div>
 
-          <div className="rounded-[10px] border border-gray-500 p-4 md:p-8">
+          <div className="rounded-[10px] border border-gray-500 p-4 md:p-6">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-400">Serviços adicionais</p>
+              <p className="text-xs font-bold text-gray-400">
+                Serviços adicionais
+              </p>
               <Button
                 size="sm"
                 onClick={() => setAddServiceOpen(true)}
@@ -192,17 +194,17 @@ export function TicketDetail() {
               </Button>
             </div>
 
-            <div className="mt-4 flex flex-col gap-1">
+            <div className="mt-4 flex flex-col gap-2">
               {ticketServicesList.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between border-b border-gray-500 py-3 last:border-0"
+                  className="flex items-center justify-between border-b border-gray-500 pb-1 last:border-0"
                 >
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-bold text-xs text-gray-200">
                     {item.name}
                   </span>
                   <div className="flex items-center gap-3">
-                    <span className="text-gray-700">
+                    <span className="text-xs text-gray-200">
                       R$ {formatCurrency(item.price)}
                     </span>
                     <Button
@@ -226,54 +228,64 @@ export function TicketDetail() {
           </div>
         </div>
 
-        <div className="w-full rounded-[10px] border border-gray-500 p-4 md:w-96 md:p-8">
-          <p className="text-sm text-gray-400">Técnico responsável</p>
+        <div>
+          <div className="w-full rounded-[10px] border border-gray-500 p-4 md:w-74 md:p-6">
+            <p className="text-xs font-bold text-gray-400">
+              Técnico responsável
+            </p>
 
-          {ticket.technician && (
-            <div className="mt-3 flex items-center gap-3">
-              <AvatarImg
-                name={ticket.technician.name}
-                avatarUrl={getAssetUrl(ticket.technician.img ?? undefined)}
-                size="md"
-              />
-              <div>
-                <p className="font-semibold text-gray-800">
-                  {ticket.technician.name}
-                </p>
-                <p className="text-sm text-gray-400">
-                  {ticket.technician.email}
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="mt-6 border-t border-gray-500 pt-6">
-            <p className="text-sm text-gray-400">Valores</p>
-            <div className="mt-2 flex items-center justify-between text-gray-700">
-              <span>Preço base</span>
-              <span>R$ {formatCurrency(ticket.basePrice)}</span>
-            </div>
-
-            {ticketServicesList.length > 0 && (
-              <div className="mt-1 flex items-center justify-between text-gray-700">
-                <span>Adicionais</span>
-                <span>
-                  R${" "}
-                  {formatCurrency(
-                    ticketServicesList
-                      .reduce((sum, item) => sum + Number(item.price), 0)
-                      .toString(),
-                  )}
-                </span>
+            {ticket.technician && (
+              <div className="mt-2 flex items-center gap-2">
+                <AvatarImg
+                  name={ticket.technician.name}
+                  avatarUrl={getAssetUrl(ticket.technician.img ?? undefined)}
+                  size="md"
+                />
+                <div>
+                  <p className="text-sm text-gray-200">
+                    {ticket.technician.name}
+                  </p>
+                  <p className="text-xs text-gray-300">
+                    {ticket.technician.email}
+                  </p>
+                </div>
               </div>
             )}
-          </div>
 
-          <div className="mt-6 flex items-center justify-between border-t border-gray-500 pt-6">
-            <span className="font-bold text-gray-800">Total</span>
-            <span className="font-bold text-gray-800">
-              R$ {formatCurrency(ticket.finalPrice ?? ticket.basePrice)}
-            </span>
+            <div className="mt-8">
+              <p className="text-xs font-bold text-gray-400">Valores</p>
+              <div className="mt-2 text-sm flex items-center justify-between text-gray-200">
+                <span>Preço base</span>
+                <span>R$ {formatCurrency(ticket.basePrice)}</span>
+              </div>
+
+              {ticketServicesList.length > 0 && (
+                <div className="mt-2">
+                  <p className="text-xs font-bold text-gray-400">Adicionais</p>
+                  <div className="mt-2 flex flex-col gap-1">
+                    {ticketServicesList.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between text-sm text-gray-200"
+                      >
+                        <span>{item.name}</span>
+                        <span>R$ {formatCurrency(item.price)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-4 flex items-center justify-between border-t border-gray-500 pt-4">
+              <span className="font-bold text-sm text-gray-200">Total</span>
+              <span className="font-bold text-sm text-gray-200">
+                R$
+                {ticket.finalPrice
+                  ? formatCurrency(ticket.finalPrice)
+                  : formatCurrency(ticket.basePrice)}
+              </span>
+            </div>
           </div>
         </div>
       </div>

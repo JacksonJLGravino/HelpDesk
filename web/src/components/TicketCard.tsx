@@ -80,7 +80,7 @@ export function TicketCard({
       <div className="mt-4 flex items-center justify-between border-t border-gray-500 pt-4">
         <div className="flex items-center gap-2">
           <AvatarImg name={clientName} avatarUrl={clientAvatarUrl} size="sm" />
-          <span className="text-sm font-semibold text-gray-800">
+          <span className="text-sm font-semibold text-gray-200">
             {clientName}
           </span>
         </div>

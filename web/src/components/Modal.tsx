@@ -21,7 +21,7 @@ export function Modal({ title, onClose, onBack, children, footer }: Props) {
             </Button>
           )}
 
-          <h2 className="flex-1 text-lg font-bold text-gray-800">{title}</h2>
+          <h2 className="flex-1 text-lg font-bold text-gray-200">{title}</h2>
 
           <Button type="button" onClick={onClose} color="link" size="sm">
             <X className="h-4 w-4" />

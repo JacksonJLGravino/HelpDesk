@@ -16,14 +16,14 @@ export function AvailabilityPreview({ times, max = 4, mobileMax = 1 }: Props) {
         {visible.map((time) => (
           <span
             key={time}
-            className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-700"
+            className="rounded-full border border-gray-500 px-3 py-1 text-xs font-semibold text-gray-400"
           >
             {time}
           </span>
         ))}
 
         {remaining > 0 && (
-          <span className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-400">
+          <span className="rounded-full border border-gray-500 px-3 py-1 text-xs font-semibold text-gray-400">
             +{remaining}
           </span>
         )}

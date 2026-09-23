@@ -84,7 +84,7 @@ export function Clients() {
                     avatarUrl={getAssetUrl(client.img ?? undefined)}
                     size="md"
                   />
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-200">
                     {client.name}
                   </span>
                 </div>
